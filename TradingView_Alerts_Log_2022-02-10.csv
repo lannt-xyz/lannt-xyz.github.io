@@ -1,0 +1,276 @@
+Alert ID,Ticker,Name,Description,Time
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 139.20000000000002 
+}",2022-02-10T01:15:03.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 114.57000000000001 
+}",2022-02-09T14:40:00.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 111.56 
+}",2022-02-08T19:00:01.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 113.85000000000001 
+}",2022-02-08T12:05:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 3.3018 
+}",2022-02-07T15:25:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 3.0653 
+}",2022-02-06T05:00:01.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 104.9 
+}",2022-02-05T15:10:02.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 114.86 
+}",2022-02-05T12:15:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.9698 
+}",2022-02-05T01:20:00.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 112.30000000000001 
+}",2022-02-04T08:05:01.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.5677000000000003 
+}",2022-02-03T20:20:02.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 97.60000000000001 
+}",2022-02-02T03:20:07.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.694 
+}",2022-02-01T21:05:00.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 96.2 
+}",2022-02-01T19:05:02.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 111.60000000000001 
+}",2022-02-01T14:40:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.7717 
+}",2022-02-01T07:30:01.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.5833 
+}",2022-01-31T14:55:00.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 91.69 
+}",2022-01-31T14:50:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.4242 
+}",2022-01-30T18:20:01.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 110.60000000000001 
+}",2022-01-29T19:50:06.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 97.07000000000001 
+}",2022-01-29T10:30:00.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 95.9 
+}",2022-01-29T06:40:01.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.2417000000000002 
+}",2022-01-28T19:40:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.21 
+}",2022-01-28T12:10:01.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 89.83 
+}",2022-01-28T09:05:01.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.2477 
+}",2022-01-26T13:25:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.2516000000000003 
+}",2022-01-26T12:05:01.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 89.89 
+}",2022-01-25T03:55:00.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 95.10000000000001 
+}",2022-01-23T22:50:50.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 97.7 
+}",2022-01-23T13:05:04.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 110.10000000000001 
+}",2022-01-23T11:05:03.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 94.2 
+}",2022-01-22T16:10:01.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 106.9 
+}",2022-01-22T16:10:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 1.9291 
+}",2022-01-22T16:10:00.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 116.2 
+}",2022-01-21T18:20:03.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 140.08 
+}",2022-01-20T19:00:01.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 139.6 
+}",2022-01-18T14:50:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.8889 
+}",2022-01-18T08:05:02.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 139.14000000000001 
+}",2022-01-18T05:50:01.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 140.11 
+}",2022-01-18T03:15:01.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 150.46 
+}",2022-01-16T17:10:01.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 146.3 
+}",2022-01-16T05:25:05.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.9575 
+}",2022-01-16T04:50:01.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 141.20000000000002 
+}",2022-01-15T20:00:00.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 148 
+}",2022-01-15T09:40:05.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 145.28 
+}",2022-01-15T05:15:00.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.9616000000000002 
+}",2022-01-15T03:50:01.000Z
+347929634,"BINANCE:MANAUSDT, 5m",MANAUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""MANAUSDT"",
+    ""price"": 2.9616000000000002 
+}",2022-01-15T03:25:00.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 146.9 
+}",2022-01-15T01:50:03.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 143.5 
+}",2022-01-13T00:10:03.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 131.5 
+}",2022-01-11T21:15:00.000Z
+359359013,"BINANCE:LTCUSDT, 5m",LTC-USDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""LTCUSDT"",
+    ""price"": 128.5 
+}",2022-01-11T15:50:01.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 136.66 
+}",2022-01-11T13:50:00.000Z
+347921498,"BINANCE:DASHUSDT, 5m",DASHUSDT-live5m,"{
+    ""action"": ""buy"",
+    ""asset"": ""DASHUSDT"",
+    ""price"": 154.20000000000002 
+}",2022-01-11T04:55:00.000Z
+347923604,"BINANCE:SOLUSDT, 5m",SOLUSDT-live5m,"{
+    ""action"": ""sell"",
+    ""asset"": ""SOLUSDT"",
+    ""price"": 137.1 
+}",2022-01-11T04:10:00.000Z
