@@ -41,17 +41,16 @@ Thống nhất đặt tên class, method, variable, constant
     - Tên variable, method thì đặt theo lowerCamelCase (CamelCase)
         VD:    variable:        memberId
             method:        getUser()
-    - Tên biến/tên hàm cho kiểu dữ liệu boolean
-        Đối với biến số hoặc hàm số có kiểu dữ liệu là boolean thì sẽ thống nhất theo nguyên tắc bên dưới.
-        - can & động từ thể nguyên mẫu
+    - Tên biến/tên hàm cho kiểu dữ liệu boolean (Đối với biến số hoặc hàm số có kiểu dữ liệu là boolean thì sẽ thống nhất theo nguyên tắc bên dưới.)
+        - can & động từ thể nguyên mẫu  
             VD:    canCheckout()
-        - has & động từ thể quá khứ
+        - has & động từ thể quá khứ  
             VD:    hasOrdered()
-        - has & danh từ
+        - has & danh từ  
             VD:    hasOrder()
-        - is & tính từ
+        - is & tính từ  
             VD:    isValid()
-        - động từ chia thể hiện tại của danh từ số ít & danh từ
+        - động từ chia thể hiện tại của danh từ số ít & danh từ  
             VD:    existsCart()
     - Tên method trong các class DAO
         - KHÔNG sử dụng dạng số nhiều của danh từ (thêm s, es), hoặc List
@@ -61,21 +60,21 @@ Thống nhất đặt tên class, method, variable, constant
                 - selectById
                 - selectOneByAbcXyz
 - Tên Hằng số
-    - Đặt tên theo SNAKE_CASE
+    - Đặt tên theo SNAKE_CASE  
         VD:    MEMBER_ID_LENGTH = 10
-    - Tên hằng số thì phải mang ý nghĩa của mục đích sử dụng chứ không phải là thể hiện giá trị của constant đang lưu trữ
-        VD:    OK    FILE_PATH_SEPARATOR = "/"
-            NG    SLASH = "/"
+    - Tên hằng số thì phải mang ý nghĩa của mục đích sử dụng chứ không phải là thể hiện giá trị của constant đang lưu trữ  
+        VD:    OK -> FILE_PATH_SEPARATOR = "/"  
+        　      NG -> SLASH = "/"
 
 ### Thống nhất trong source code
 
 - Xử lý phải có ý nghĩa
-    - Không khai báo những biến số không sử dụng
+    - Không khai báo những biến số không sử dụng  
     Đối với eclipse ide thì những biến số không được sử dụng sẽ được warning, tuy nhiên sau khi hoàn thành coding thì cần confirm lại và xóa đi
-    - Không viết những đoạn code vô nghĩa hoặc không được sử dụng
+    - Không viết những đoạn code vô nghĩa hoặc không được sử dụng  
     Trong quá trình thực thi thì có thể sẽ phát sinh những đoạn code tạm và sau khi hoàn thành coding cần confirm lại và xóa đi
 - Phân chia xử lý
-    - Không dồn quá nhiều xử lý vào một method (mỗi method thực hiện duy nhất một công việc)
+    - Không dồn quá nhiều xử lý vào một method (mỗi method thực hiện duy nhất một công việc)  
     Việc dồn quá nhiều xử lý vào 1 method thì sẽ làm source code thiếu linh động, khó hiểu, dẫn đến khó bảo trì
     - Trường hợp if/else nhiều lần thì nên dùng switch/case
 - Thống nhất trong xử lý
@@ -87,13 +86,15 @@ Thống nhất đặt tên class, method, variable, constant
     - Những hằng số mang đặc trưng của một chức năng thì khai báo thành hằng số chỉ sử dụng trong chức năng đó(trong cùng class),
     trường hợp hằng số có thể dùng được ở nhiều chức năng khác nhau thì khai báo thành hằng số common của project
 - Xử lý NULL
-    - Phải có biện pháp xử lý cho trường hợp đối tượng là NULL
-    Trường hợp object NULL thì khi truy cập vào property hoặc method sẽ phát sinh NullPointerException,
+    - Phải có biện pháp xử lý cho trường hợp đối tượng là NULL  
+    Trường hợp object NULL thì khi truy cập vào property hoặc method sẽ phát sinh NullPointerException,  
       đây là unchecked exception cho nên chỉ khi runtime mới phát sinh, vì vậy nếu không kiểm soát tốt thì sẽ phát sinh bug tìm ẩn
-    Khi mà không đảm bảo được object là khác NULL thì cần thêm xử lý check như bên dưới
+    Khi mà không đảm bảo được object là khác NULL thì cần thêm xử lý check như bên dưới  
+    ```java
       if (!ObjectUtils.isEmpty(object)) {
         object.xyz();
       }
+    ```
 
 ### Others
 
