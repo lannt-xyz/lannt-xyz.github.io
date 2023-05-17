@@ -1,0 +1,132 @@
+Let’s imagine that you were starting to build a brand new taxi-hailing application intended to compete with Uber and Hailo.
+After some preliminary meetings and requirements gathering, you would create a new project either manually or by using a generator that comes with a platform such as Rails, Spring Boot, Play, or Maven.
+----
+Hãy tưởng tượng rằng bạn đang bắt đầu xây dựng một ứng dụng gọi taxi hoàn toàn mới nhằm cạnh tranh với Uber và Hailo. 
+Sau khi thu thập các cuộc họp và yêu cầu sơ bộ, bạn sẽ tạo một dự án mới bằng tay hoặc bằng cách sử dụng một máy phát đi kèm nền tảng như vậy như Rails, Spring Boot, Play hoặc Maven.
+
+
+At the core of the application is the business logic, which is implemented by modules that define services, domain objects, and events.
+Surrounding the core are adapters that interface with the external world. Examples of adapters include database access components, messaging components that produce and consume messages, and web components that either expose APIs or implement a UI.
+----
+Core của ứng dụng là logic nghiệp vụ, được triển khai bởi các mô đun được defined thành dịch vụ, domain object và sự kiện.
+Xung quanh core là các adapter là interface để kết nối với thế giới bên ngoài. Ví dụ như bao gồm các adapter dung cho việc connect database, messaging component bao gồm produce và consume, và web components các RestAPI hoặc là WEB UI
+
+Despite having a logically modular architecture, the application is packaged and deployed as a monolith. The actual format depends on the application’s language and framework.
+For example, many Java applications are packaged as WAR files and deployed on application servers such as Tomcat or Jetty.
+Other Java applications are packaged as self-contained executable JARs. Similarly, Rails and Node.js applications are packaged as a directory hierarchy.
+----
+Mặc dù có kiến ​​trúc mô đun logic, ứng dụng được đóng gói và triển khai dưới dạng nguyên khối. Định dạng thực tế phụ thuộc vào ngôn ngữ và khung của ứng dụng.
+Ví dụ, nhiều ứng dụng Java được đóng gói dưới dạng tệp WAR và được triển khai trên các máy chủ ứng dụng như Tomcat hoặc Jetty.
+Các ứng dụng Java khác được đóng gói dưới dạng JAR thực thi độc lập. Tương tự, các ứng dụng Rails và Node.js được đóng gói dưới dạng phân cấp thư mục
+
+Applications written in this style are extremely common They are simple to develop since our IDEs and other tools are focused on building a single application.
+These kinds of applications are also simple to test. You can implement end-to-end testing by simply launching the application and testing the UI with a testing package such as Selenium Monolithic applications are also simple to deploy You just have to copy the packaged application to a server You can also scale the application by running multiple copies behind a load balancer. In the early stages of the project it works well.
+----
+Các ứng dụng được viết theo phong cách này rất phổ biến Chúng rất đơn giản để phát triển vì IDE và các công cụ khác của chúng tôi tập trung vào việc xây dựng một ứng dụng duy nhất.
+Các loại ứng dụng này cũng rất đơn giản để kiểm tra. Bạn có thể thực hiện thử nghiệm từ đầu đến cuối bằng cách khởi chạy ứng dụng và kiểm tra giao diện người dùng với gói thử nghiệm, chẳng hạn như các ứng dụng Selenium Monolithic cũng đơn giản để triển khai Bạn chỉ cần sao chép ứng dụng đã đóng gói vào máy chủ Bạn cũng có thể mở rộng ứng dụng bằng cách chạy nhiều bản sao phía sau bộ cân bằng tải. dự án nó hoạt động tốt.
+
+Unfortunately, this simple approach has a huge limitation.
+Successful applications have a habit of growing over time and eventually becoming huge.
+During each sprint, your development team implements a few more user stories, which, of course, means adding many lines of code.
+After a few years, your small, simple application will have grown into a monstrous monolith.
+To give an extreme example, I recently spoke to a developer who was writing a tool to analyze the dependencies between the thousands of JARs in their multi-million lines of code (LOC) application.
+I’m sure it took the concerted effort of a large number of developers over many years to create such a beast.
+----
+Thật không may, cách tiếp cận đơn giản này có một hạn chế rất lớn.
+Các ứng dụng thành công có thói quen phát triển theo thời gian và cuối cùng trở nên khổng lồ.
+Trong mỗi lần chạy nước rút, nhóm phát triển của bạn thực hiện thêm một vài câu chuyện người dùng, tất nhiên, có nghĩa là thêm nhiều dòng mã.
+Sau một vài năm, ứng dụng nhỏ, đơn giản của bạn sẽ phát triển thành một khối nguyên khối quái dị.
+Để đưa ra một ví dụ cực đoan, gần đây tôi đã nói chuyện với một nhà phát triển đang viết một công cụ để phân tích sự phụ thuộc giữa hàng ngàn JAR trong hàng triệu dòng của họ ứng dụng mã (LOC).
+Tôi chắc chắn rằng phải mất nỗ lực phối hợp của một số lượng lớn các nhà phát triển trong nhiều năm để tạo ra một con thú như vậy.
+
+Once your application has become a large, complex monolith, your development organization is probably in a world of pain. Any attempts at agile development and delivery will flounder.
+One major problem is that the application is overwhelmingly complex. It’s simply too large for any single developer to fully understand.
+As a result, fixing bugs and implementing new features correctly becomes difficult and time consuming. 
+What’s more, this tends to be a downwards spiral. If the codebase is difficult to understand, then changes won’t be made correctly You will end up with a monstrous, incomprehensible big ball of mud.
+----
+Một khi ứng dụng của bạn trở thành một khối lớn, phức tạp, tổ chức phát triển của bạn có thể đang ở trong một thế giới đau khổ. Mọi nỗ lực phát triển và phân phối nhanh sẽ gặp khó khăn.
+Một vấn đề lớn là ứng dụng này quá phức tạp. Nó đơn giản là quá lớn đối với bất kỳ ai Nhà phát triển hoàn toàn hiểu được.
+Kết quả là, sửa lỗi và triển khai các tính năng mới một cách chính xác trở nên khó khăn và tốn thời gian.
+Hơn nữa, điều này có xu hướng là một vòng xoáy đi xuống. Nếu codebase khó hiểu, thì các thay đổi sẽ không được thực hiện chính xác Bạn sẽ kết thúc với một quả bóng bùn khổng lồ và khó hiểu
+
+The sheer size of the application will also slow down development.
+The larger the application, the longer the start-up time is.
+I surveyed developers about the size and performance of their monolithic applications, and some reported start-up times as long as 12 minutes.
+I’ve also heard anecdotes of applications taking as long as 40 minutes to start up.
+If developers regularly have to restart the application server, then a large part of their day will be spent waiting around and their productivity will suffer.
+----
+Kích thước tuyệt đối của ứng dụng cũng sẽ làm chậm quá trình phát triển.
+Ứng dụng càng lớn, thời gian khởi động càng dài.
+Tôi càng khảo sát các nhà phát triển về kích thước và hiệu suất của các ứng dụng nguyên khối của họ và một số thời gian khởi động được báo cáo dài tới 12 phút.
+Tôi cũng đã nghe những giai thoại về các ứng dụng mất tới 40 phút để khởi động.
+Nếu các nhà phát triển thường xuyên phải khởi động lại máy chủ ứng dụng, thì một phần lớn thời gian trong ngày của họ sẽ được chờ đợi và năng suất của họ sẽ bị ảnh hưởng.
+
+Another problem with a large, complex monolithic application is that it is an obstacle to continuous deployment. Today, the state of the art for SaaS applications is to push changes into production many times a day. This is extremely difficult to do with a complex monolith, since you must redeploy the entire application in order to update any one part of it. The lengthy start-up times that I mentioned earlier won’t help either. Also, since the impact of a change is usually not very well understood, it is likely that you have to do extensive manual testing. Consequently, continuous deployment is next to impossible to do.
+Monolithic applications can also be difficult to scale when different modules have conflicting resource requirements. For example, one module might implement CPU-intensive image processing logic and would ideally be deployed in Amazon EC2 Compute Optimized instances. Another module might be an in-memory database and best suited for EC2 Memory-optimized instances. However, because these modules are deployed together, you have to compromise on the choice of hardware.
+Another problem with monolithic applications is reliability. Because all modules are running within the same process, a bug in any module, such as a memory leak, can potentially bring down the entire process. Moreover, since all instances of the application are identical, that bug will impact the availability of the entire application.
+Last but not least, monolithic applications make it extremely difficult to adopt new frameworks and languages. For example, let’s imagine that you have 2 million lines of code written using the XYZ framework. It would be extremely expensive (in both time and cost) to rewrite the entire application to use the newer ABC framework, even if that framework was considerably better. As a result, there is a huge barrier to adopting new technologies. You are stuck with whatever technology choices you made at the start of the project.
+To summarize: you have a successful business-critical application that has grown into a monstrous monolith that very few, if any, developers understand. It is written using obsolete, unproductive technology that makes hiring talented developers difficult. The application is difficult to scale and is unreliable. As a result, agile development and delivery of applications is impossible So what can you do about it.
+----
+Một vấn đề khác với một ứng dụng nguyên khối lớn, phức tạp là nó là một trở ngại cho việc triển khai liên tục. Hiện nay, tình trạng của các ứng dụng SaaS là ​​đẩy các thay đổi vào sản xuất nhiều lần trong ngày. Điều này cực kỳ khó thực hiện với một khối nguyên khối phức tạp , vì bạn phải triển khai lại toàn bộ ứng dụng để cập nhật bất kỳ phần nào của nó. Thời gian khởi động dài mà tôi đã đề cập trước đó cũng không giúp được gì. Ngoài ra, vì tác động của thay đổi thường không được hiểu rõ lắm, nên nó có khả năng là bạn phải tăng cường kiểm tra thủ công, việc triển khai liên tục bên cạnh việc không thể thực hiện.
+Các ứng dụng nguyên khối cũng có thể khó mở rộng khi các mô-đun khác nhau có các yêu cầu tài nguyên xung đột. Ví dụ: một mô-đun có thể triển khai logic xử lý hình ảnh chuyên sâu CPU và lý tưởng sẽ được triển khai trong các phiên bản Tối ưu hóa điện toán của Amazon EC2. Một mô-đun khác có thể là cơ sở dữ liệu trong bộ nhớ và phù hợp nhất cho các trường hợp được tối ưu hóa Bộ nhớ EC2. bởi vì các mô-đun này được triển khai cùng nhau, bạn phải thỏa hiệp với sự lựa chọn phần cứng.
+Một vấn đề khác với các ứng dụng nguyên khối là độ tin cậy. xuống toàn bộ quá trình. Hơn nữa, vì tất cả các phiên bản của ứng dụng đều giống hệt nhau, lỗi đó sẽ ảnh hưởng đến tính khả dụng của toàn bộ ứng dụng.
+Cuối cùng nhưng không kém phần quan trọng, các ứng dụng nguyên khối làm cho việc áp dụng các khung và ngôn ngữ mới rất khó. Bạn có 2 triệu dòng mã được viết bằng khung XYZ. Sẽ rất tốn kém (cả về thời gian và chi phí) để viết lại toàn bộ ứng dụng để sử dụng khung ABC mới hơn, ngay cả khi khung đó tốt hơn đáng kể. có một rào cản lớn đối với việc áp dụng các công nghệ mới. Bạn bị mắc kẹt với bất kỳ lựa chọn công nghệ nào bạn đã thực hiện khi bắt đầu dự án.
+Tóm lại: bạn đã thành công Ứng dụng quan trọng trong kinh doanh đã phát triển thành một khối khổng lồ mà rất ít, nếu có, các nhà phát triển hiểu. Nó được viết bằng công nghệ lạc hậu, không hiệu quả khiến việc thuê các nhà phát triển tài năng trở nên khó khăn. Ứng dụng này rất khó mở rộng và không đáng tin cậy. phát triển nhanh và phân phối ứng dụng là không thể. Vậy bạn có thể làm gì với nó
+
+Many organizations, such as Amazon, eBay, and Netflix, have solved this problem by adopting what is now known as the Microservices Architecture pattern. Instead of building a single monstrous, monolithic application, the idea is to split your application into set of smaller, interconnected services.
+A service typically implements a set of distinct features or functionality, such as order management, customer management, etc. Each microservice is a mini-application that has its own hexagonal architecture consisting of business logic along with various adapters.
+Some microservices would expose an API that’s consumed by other microservices or by the application’s clients Other microservices might implement a web UI At runtime, each instance is often a cloud virtual machine (VM) or a Docker container.
+----
+Nhiều tổ chức, chẳng hạn như Amazon, eBay và Netflix, đã giải quyết vấn đề này bằng cách áp dụng mô hình Kiến trúc microservice. Các dịch vụ được kết nối với nhau Một dịch vụ thường triển khai một tập hợp các tính năng hoặc chức năng riêng biệt, chẳng hạn như quản lý đơn hàng, quản lý khách hàng, v.v ... 
+Mỗi microservice là một ứng dụng nhỏ có kiến ​​trúc lục giác riêng bao gồm logic kinh doanh cùng với các bộ điều hợp khác nhau. API được sử dụng bởi các dịch vụ siêu nhỏ khác hoặc bởi các máy khách của ứng dụng Các dịch vụ siêu nhỏ khác có thể triển khai giao diện người dùng web Khi chạy, mỗi phiên bản thường là một máy ảo đám mây (VM) hoặc bộ chứa Docker.
+
+The Microservices Architecture pattern corresponds to the Y-axis scaling of the Scale Cube, which is a 3D model of scalability from the excellent book The Art of Scalability. The other two scaling axes are X-axis scaling, which consists of running multiple identical copies of the application behind a load balancer, and Z-axis scaling (or data partitioning), where an attribute of the request (for example, the primary key of a row or identity of a customer) is used to route the request to a particular server.
+----
+Mẫu Kiến trúc microservice tương ứng với tỷ lệ trục Y của Scale Cube, là mô hình 3D về khả năng mở rộng từ cuốn sách tuyệt vời The Art of Scalability. Hai trục tỷ lệ khác là tỷ lệ trục X, bao gồm chạy nhiều bản sao giống hệt nhau. của ứng dụng đằng sau bộ cân bằng tải và chia tỷ lệ trục Z (hoặc phân vùng dữ liệu), trong đó một thuộc tính của yêu cầu (ví dụ: khóa chính của một hàng hoặc danh tính của khách hàng) được sử dụng để định tuyến yêu cầu đến một cụ thể người phục vụ.
+
+Applications typically use the three types of scaling together. Y-axis scaling decomposes the application into microservices as shown above in Figure 1-2. At runtime, X-axis scaling runs multiple instances of each service behind a load balancer for throughput and availability. Some applications might also use Z-axis scaling to partition the services Figure 1-4 shows how the Trip Management service might be deployed with Docker running on Amazon EC2.
+----
+Các ứng dụng thường sử dụng ba loại chia tỷ lệ với nhau. Chia tỷ lệ trục Y phân tách ứng dụng thành microservice như trong Hình 1-2. Trong thời gian chạy, tỷ lệ trục X chạy nhiều phiên bản của mỗi dịch vụ phía sau bộ cân bằng tải để thông lượng và tính khả dụng. Một số ứng dụng cũng có thể sử dụng tỷ lệ trục Z để phân vùng các dịch vụ Hình 1-4 cho thấy cách dịch vụ Quản lý chuyến đi có thể được triển khai với Docker chạy trên Amazon EC2.
+
+At runtime, the Trip Management service consists of multiple service instances. Each service instance is a Docker container In order to be highly available, the containers are running on multiple Cloud VMs. In front of the service instances is a load balancer such as NGINX that distributes requests across the instances. The load balancer might also handle other concerns such as caching, access control, API metering, and monitoring.
+----
+Trong thời gian chạy, dịch vụ Quản lý chuyến đi bao gồm nhiều phiên bản dịch vụ. Mỗi phiên bản dịch vụ là một bộ chứa Docker Để có tính khả dụng cao, các bộ chứa đang chạy trên nhiều máy ảo Cloud. Trước các phiên bản dịch vụ là bộ cân bằng tải như NGINX phân phối các yêu cầu trên các phiên bản. Bộ cân bằng tải cũng có thể xử lý các mối quan tâm khác như bộ đệm, kiểm soát truy cập, đo sáng API và giám sát.
+
+The Microservices Architecture pattern significantly impacts the relationship between the application and the database. Rather than sharing a single database schema with other services, each service has its own database schema. On the one hand, this approach is at odds with the idea of an enterprise-wide data model. Also, it often results in duplication of some data. However, having a database schema per service is essential if you want to benefit from microservices, because it ensures loose coupling. Figure 1-5 shows the database architecture for the sample application.
+----
+Mẫu Kiến trúc microservice tác động đáng kể đến mối quan hệ giữa ứng dụng và cơ sở dữ liệu. Thu thập hơn là chia sẻ một lược đồ cơ sở dữ liệu với các dịch vụ khác, mỗi dịch vụ có lược đồ cơ sở dữ liệu riêng. Một mặt, cách tiếp cận này không phù hợp với ý tưởng của một doanh nghiệp. Mô hình dữ liệu toàn diện. Ngoài ra, nó thường dẫn đến sự trùng lặp của một số dữ liệu. Tuy nhiên, việc có một lược đồ cơ sở dữ liệu cho mỗi dịch vụ là điều cần thiết nếu bạn muốn hưởng lợi từ microservice, vì nó đảm bảo khớp nối lỏng lẻo. Hình 1-5 hiển thị kiến ​​trúc cơ sở dữ liệu cho ứng dụng mẫu.
+
+Each of the services has its own database. Moreover, a service can use a type of database that is best suited to its needs, the so-called polyglot persistence architecture For example, Driver Management, which finds drivers close to a potential passenger, must use a database that supports efficient geo-queries.
+----
+Mỗi dịch vụ có cơ sở dữ liệu riêng. Ngoài ra, một dịch vụ có thể sử dụng một loại cơ sở dữ liệu phù hợp nhất với nhu cầu của nó, cái gọi là kiến ​​trúc kiên trì polyglot, ví dụ, Quản lý trình điều khiển, tìm trình điều khiển gần với hành khách tiềm năng, phải sử dụng cơ sở dữ liệu hỗ trợ các truy vấn địa lý hiệu quả.
+
+The Microservices Architecture pattern has a number of important benefits. First, it tackles the problem of complexity. It decomposes what would otherwise be a monstrous monolithic application into a set of services. While the total amount of functionality is unchanged, the application has been broken up into manageable chunks or services. Each service has a well-defined boundary in the form of a remote procedure call (RPC)-driven or message-driven API. The Microservices Architecture pattern enforces a level of modularity that in practice is extremely difficult to achieve with a monolithic codebase. Consequently, individual services are much faster to develop and much easier to understand and maintain.
+----
+Mẫu Kiến trúc microservice có một số lợi ích quan trọng. Trước tiên, nó giải quyết vấn đề phức tạp. Nó phân tách những gì sẽ là một ứng dụng nguyên khối quái dị thành một tập hợp các dịch vụ. Trong khi tổng số lượng chức năng không thay đổi, ứng dụng đã chia ra các khối hoặc dịch vụ có thể quản lý được. Mỗi dịch vụ đều có một ranh giới được xác định rõ ràng dưới dạng một remote procedure call (RPC)-driven hoặc message-driven API. Mô hình Kiến trúc microservice thực thi một mức độ mô đun hóa mà trong thực tế là rất khó đạt được với một codebase nguyên khối. Do đó, các dịch vụ riêng lẻ phát triển nhanh hơn nhiều và dễ hiểu và dễ bảo trì hơn nhiều
+
+Second, this architecture enables each service to be developed independently by a team that is focused on that service. The developers are free to choose whatever technologies make sense, provided that the service honors the API contract. Of course, most organizations would want to avoid complete anarchy by limiting technology options. However, this freedom means that developers are no longer obligated to use the possibly obsolete technologies that existed at the start of a new project. When writing a new service, they have the option of using current technology. Moreover, since services are relatively small, it becomes more feasible to rewrite an old service using current technology.
+----
+Thứ hai, kiến ​​trúc này cho phép mỗi dịch vụ được phát triển độc lập bởi một nhóm tập trung vào dịch vụ đó. Các nhà phát triển có thể tự do lựa chọn bất kỳ công nghệ nào có ý nghĩa, miễn là dịch vụ tôn vinh hợp đồng API. Tất nhiên, hầu hết các tổ chức đều muốn tránh Hoàn thành tình trạng hỗn loạn bằng cách giới hạn các tùy chọn công nghệ. Tuy nhiên, sự tự do này có nghĩa là các nhà phát triển không còn bắt buộc phải sử dụng các công nghệ lỗi thời có thể tồn tại khi bắt đầu một dự án mới. Khi viết một dịch vụ mới, họ có tùy chọn sử dụng công nghệ hiện tại. , vì các dịch vụ tương đối nhỏ, việc viết lại một dịch vụ cũ bằng công nghệ hiện tại trở nên khả thi hơn.
+
+Third, the Microservices Architecture pattern enables each microservice to be deployed independently. Developers never need to coordinate the deployment of changes that are local to their service. These kinds of changes can be deployed as soon as they have been tested. The UI team can, for example, perform A|B testing and rapidly iterate on UI changes. The Microservices Architecture pattern makes continuous deployment possible.
+
+Finally, the Microservices Architecture pattern enables each service to be scaled independently. You can deploy just the number of instances of each service that satisfy its capacity and availability constraints.
+Moreover, you can use the hardware that best matches a service’s resource requirements For example, you can deploy a CPU-intensive image processing service on EC2 Compute Optimized instances and deploy an in-memory database service on EC2 Memory-optimized instances.
+----
+Cuối cùng, mẫu Kiến trúc microservice cho phép mỗi dịch vụ được thu nhỏ độc lập. Bạn chỉ có thể triển khai số lượng phiên bản của mỗi dịch vụ thỏa mãn các hạn chế về khả năng và tính khả dụng của nó.
+Ngoài ra, bạn có thể sử dụng phần cứng phù hợp nhất với yêu cầu tài nguyên của Dịch vụ Ví dụ: bạn có thể triển khai dịch vụ xử lý hình ảnh chuyên sâu về CPU trên các phiên bản Tối ưu hóa tính toán EC2 và triển khai dịch vụ cơ sở dữ liệu trong bộ nhớ trên các trường hợp được tối ưu hóa Bộ nhớ EC2.
+
+One drawback is the name itself. The term microservice places excessive emphasis on service size. In fact, there are some developers who advocate for building extremely fine-grained 10-100 LOC services. While small services are preferable, it’s important to remember that small services are a means to an end, and not the primary goal. The goal of microservices is to sufficiently decompose the application in order to facilitate agile application development and deployment.
+----
+Một nhược điểm là tên của chính nó. Thuật ngữ microservice đặt trọng tâm quá mức vào kích thước dịch vụ. Trên thực tế, có một số nhà phát triển ủng hộ việc xây dựng các dịch vụ 10 - 100 LỘC cực kỳ tốt. Mặc dù các dịch vụ nhỏ được ưa thích hơn, nhưng điều quan trọng cần nhớ là các dịch vụ nhỏ là phương tiện để kết thúc và không phải là mục tiêu chính. Mục tiêu của microservice là phân hủy ứng dụng đủ để tạo điều kiện cho việc phát triển và triển khai ứng dụng nhanh.
+
+Another major drawback of microservices is the complexity that arises from the fact that a microservices application is a distributed system. Developers need to choose and implement an inter-process communication mechanism based on either messaging or RPC. Moreover, they must also write code to handle partial failure, since the destination of a request might be slow or unavailable. While none of this is rocket science, it’s much more complex than in a monolithic application, where modules invoke one another via language-level method/procedure calls.
+----
+Một nhược điểm lớn khác của microservice là sự phức tạp nảy sinh từ việc ứng dụng microservice là một hệ thống phân tán.
+Các nhà phát triển cần chọn và thực hiện cơ chế giao tiếp giữa các quá trình dựa trên nhắn tin hoặc RPC.
+Ngoài ra, họ cũng phải viết mã để xử lý lỗi một phần, vì đích đến của yêu cầu có thể chậm hoặc không khả dụng. Mặc dù đây không phải là khoa học tên lửa, nhưng nó phức tạp hơn nhiều so với trong một ứng dụng nguyên khối, trong đó các mô-đun gọi nhau thông qua các cuộc gọi thủ tục / phương thức ở cấp độ ngôn ngữ.
+
+
+Domain model là cách chúng ta hiểu biết về thế giới thực và những vấn đề mà phần mềm của chúng ta cần giải quyết, là cách thiết kế kiến trúc ở mức độ hệ thống chứ không phải mức độ class như MVC hay những design pattern khác.
+Với cách làm thông thường khi xây dựng một hệ thống là chúng ta có có 1 bản thiết kế, sau khi phân tích từ file design chúng ta xác định mình cần làm gì và bắt đầu code.
+Tuy nhiên với mô hình DDD lại ngược lại, chúng ta phải tìm hiểu từ domain, hay nói cách khác là đi từ tổng quát nghiệp vụ của project sau đó mới đến phần design. 

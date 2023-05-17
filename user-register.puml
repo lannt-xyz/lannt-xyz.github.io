@@ -1,0 +1,73 @@
+@startuml
+title UserRegisterAPI
+User -> UserController: Register
+note right of User
+  user_name
+  password
+  first_name
+  last_name
+  gender
+  email
+  tel_no
+  role
+end note
+activate UserController
+
+UserController -> UserRegisterValidator: Validate
+activate UserRegisterValidator
+
+UserController <- UserRegisterValidator: Result
+deactivate UserRegisterValidator
+
+alt has error
+  User <- UserController: Response Error
+else
+  activate UserController
+  UserController -> UserService: regist(UserDto)
+  activate UserService
+
+  UserService -> domain.model.User: create(UserDto)
+  activate domain.model.User
+
+  domain.model.User -> domain.model.User: generateSalt()
+
+  activate domain.model.User
+  domain.model.User -> domain.model.User: encryptPassword(UserDto.password, salt)
+
+  activate domain.model.User
+  domain.model.User -> domain.model.User: generateId()
+
+  UserService <- domain.model.User: domain.model.User
+  deactivate domain.model.User
+  deactivate domain.model.User
+  deactivate domain.model.User
+  deactivate domain.model.User
+
+  UserService -> UserRepository: regist(domain.model.User)
+  activate UserRepository
+    UserRepository -> domain.model.User: generateEntity()
+    activate domain.model.User
+      UserRepository <- domain.model.User: Entity
+    deactivate domain.model.User
+
+    UserRepository -> UserRepository: save(UserEntity)
+    activate UserRepository
+      UserRepository -> DB: Register Data
+      activate DB
+        note right DB
+          Table User (TBL_USER)
+        end note
+        UserRepository <- DB: Result
+      deactivate DB
+      UserService <- UserRepository: Result
+    deactivate UserRepository
+  deactivate UserRepository
+
+  UserController <- UserService: Result
+
+  deactivate UserService
+
+  User <- UserController: Response
+end
+
+@enduml
