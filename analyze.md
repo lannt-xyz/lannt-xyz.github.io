@@ -1,6 +1,6 @@
-# Live2D Website Rebuild — WBS, Requirements & Estimation
+# EC Website Rebuild — WBS, Requirements & Estimation
 
-> Phạm vi: Làm mới website Live2D trên nền **WordPress**, kiến trúc **đa ngôn ngữ-ready**
+> Phạm vi: Làm mới website EC trên nền **WordPress**, kiến trúc **đa ngôn ngữ-ready**
 > nhưng **go-live tiếng Anh trước**. Tích hợp **WooCommerce** (catalog) +
 > **Paddle overlay checkout (MoR — tax/VAT)** + **Keygen.sh (license management)**.
 > Các ngôn ngữ ngoài tiếng Anh được **tách thành phase riêng (Phase L)** và **báo giá theo từng ngôn ngữ**.
