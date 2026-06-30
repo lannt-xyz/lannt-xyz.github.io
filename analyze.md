@@ -27,7 +27,7 @@
 | FR-13 | Đơn hàng | Đồng bộ order Woo ↔ Paddle; webhook xác thực chữ ký + idempotency |
 | FR-14 | License | Tạo license RLM Cloud theo policy (PRO/**Trial**/Student/Edu/Awards) khi mua xong; **Try → cấp trial license** |
 | FR-15 | License | Refund/chargeback → suspend/revoke; trial hết hạn → tự khóa |
-| FR-16 | License | My Account: xem key, machines, activate/deactivate, tải hóa đơn |
+| FR-16 | License | My Account: xem/tra license key, deactivate/chuyển máy (max 2 PC/license), order history, quản lý subscription, coupon student — **[ĐIỀU TRA] đã tồn tại trên store hiện hành, làm theo cái có** |
 | FR-17 | License | Cubism Editor activate/validate qua **Reprise RLM Cloud** (cloud activation) |
 | FR-18 | Vận hành | Phân quyền editor cho team nội dung tự cập nhật news/sale/sản phẩm |
 | FR-19 | Tiện ích | Site search (tìm kiếm toàn site) |
@@ -211,22 +211,47 @@ giả định **bản dịch nội dung do khách/vendor cung cấp** (xem ghi c
 
 ---
 
-## 5b. Phase M — Data Migration (D7 — báo giá riêng, tùy chọn)
+## 5b. Phase M — Data Migration: Welcart → WooCommerce (báo giá riêng, ĐÃ XÁC NHẬN in-scope)
 
-Giả định **CÓ migration** user/đơn hàng/license từ store cũ. Tách riêng vì phụ thuộc hệ thống cũ.
+**[USER xác nhận]** Store hiện hành chạy **Welcart**, yêu cầu **migrate sang WooCommerce**. Tách báo giá riêng theo yêu cầu, nhưng là hạng mục **bắt buộc** (không phải tùy chọn).
+
+> ⚠️ Migration **khác plugin** (Welcart → WooCommerce), schema riêng → nặng hơn migration cùng nền; rủi ro cao nhất ở subscription đang active.
 
 | Task | MD |
 |------|----|
-| Phân tích & mapping schema store cũ → WooCommerce | 3 |
+| Reverse-engineer schema Welcart (customer/order/subscription/license) | 4 |
+| Mapping Welcart → WooCommerce data model | 3 |
 | Migration tài khoản khách (export/import + flow reset mật khẩu) | 4 |
-| Migration lịch sử đơn hàng/giao dịch | 4 |
+| Migration lịch sử đơn hàng/subscription đang chạy | 5 |
 | Đối soát & map license cũ → RLM Cloud | 5 |
 | Validate dữ liệu + dry-run + cutover | 3 |
-| **Subtotal** | **19** |
-| Contingency ~15% | ~3 |
-| **Tổng Migration (đề xuất)** | **~22 MD** |
+| **Subtotal** | **24** |
+| Contingency ~20% (migration khác plugin, rủi ro cao) | ~5 |
+| **Tổng Migration (đề xuất)** | **~29 MD** |
 
-> Phụ thuộc lớn vào chất lượng/định dạng dữ liệu cũ — nếu schema phức tạp hoặc license cũ không chuẩn, có thể phát sinh thêm.
+> Phụ thuộc lớn vào chất lượng/định dạng DB Welcart và **subscription đang active** (phải chuyển sang Paddle không gián đoạn billing) — cần khảo sát thực tế DB ở bước spec, có thể phát sinh thêm.
+
+### 5b.1 — 3 điểm rủi ro then chốt của migration (BẮT BUỘC khảo sát sớm)
+
+Ba điểm dưới đây quyết định **độ khả thi** và có thể **đẩy MD lên** nếu chủ quan. Phải đưa vào **technical discovery** ngay đầu dự án.
+
+**① Khác plugin hoàn toàn (Welcart `usces_*` → WooCommerce)**
+- Data model Welcart khác Woo; **không có công cụ chuyển thẳng** → phải reverse-engineer + viết script mapping riêng.
+- Rủi ro: mất/sai dữ liệu khách, đơn, coupon, thuế lịch sử nếu mapping thiếu.
+- Cần lấy: full schema + dump DB Welcart (bảng customer/order/subscription/coupon/license).
+
+**② Subscription đang active — ĐIỂM KHÓ NHẤT**
+- Khách đang trả theo kỳ trên Welcart (credit card/PayPal) phải chuyển sang **Paddle** mà **KHÔNG gián đoạn billing** và **KHÔNG bắt khách nhập lại thẻ**.
+- Token thẻ ở cổng thanh toán cũ thường **không port được** sang Paddle → cần chiến lược: re-subscribe có hướng dẫn, song song 2 hệ trong giai đoạn chuyển tiếp, hoặc thỏa thuận với Paddle về import.
+- Rủi ro: mất doanh thu định kỳ, churn khách nếu xử lý sai.
+- Cần lấy: cơ chế thanh toán/subscription hiện tại, chu kỳ gia hạn, số sub đang active, hợp đồng cổng cũ.
+
+**③ License đang hoạt động (max 2 PC/license) → RLM Cloud**
+- Phải map license + **trạng thái activation hiện tại** sang RLM Cloud, giữ nguyên để khách **không bị khóa** phần mềm.
+- Rủi ro: khách đang dùng bị deactivate đột ngột, hoặc activation count sai.
+- Cần lấy: danh sách license + máy đã activate, mô hình activation hiện hành, khả năng import của RLM Cloud.
+
+> **Khuyến nghị:** chạy **technical discovery cho migration** TRƯỚC khi chốt giá Phase M — nếu ②/③ phức tạp hơn dự kiến, MD và rủi ro sẽ tăng đáng kể.
 
 ---
 
@@ -248,15 +273,16 @@ Giả định **CÓ migration** user/đơn hàng/license từ store cũ. Tách r
 | Contingency ~15% | ~40 |
 | **Tổng EN (đề xuất)** | **~307 MD** |
 
-### Hạng mục báo giá riêng (tùy chọn, cộng thêm)
+### Hạng mục báo giá riêng (cộng thêm)
 
-| Hạng mục | MD |
-|----------|----|
-| Mỗi ngôn ngữ thêm (Phase L) | 8 |
-| Cả 6 ngôn ngữ | 48 (+ contingency ~7 → ~55) |
-| Data migration (Phase M) | ~22 |
+| Hạng mục | MD | Trạng thái |
+|----------|----|-----------|
+| Data migration (Phase M — Welcart→Woo) | ~29 | **bắt buộc** (đã xác nhận) |
+| Mỗi ngôn ngữ thêm (Phase L) | 8 | tùy chọn |
+| Cả 6 ngôn ngữ | 48 (+ contingency ~7 → ~55) | tùy chọn |
 
-**Tổng nếu làm full 7 ngôn ngữ + migration:** ~307 + ~55 + ~22 ≈ **~384 MD**
+**Tối thiểu (EN + migration bắt buộc):** ~307 + ~29 ≈ **~336 MD**
+**Full (7 ngôn ngữ + migration):** ~307 + ~55 + ~29 ≈ **~391 MD**
 
 ---
 
@@ -304,7 +330,8 @@ Tuần:  16  17  18  19  20  21  22
 - Tích hợp web↔RLM Cloud qua **REST/JSON Web Services API** (provision/activate/verify license).
 - Cubism Editor đã/đang tích hợp RLM Cloud activation (chỉ cần verify client, không build lại).
 - Dùng theme tùy biến trên Gutenberg (không phải page builder nặng).
-- Store hiện hành (store.xxx.com) **đã chạy WordPress** (theme xxxStore) → migration & tiếp tục WP khả thi; cấu trúc sản phẩm single-item + variant + quantity giữ như cũ.
+- Store hiện hành (store.live2d.com) **đã chạy WordPress** (theme Live2DStore) **+ plugin EC Welcart** (không phải WooCommerce — dấu hiệu `usces_page=login/newmember`). → Việc chuyển sang WooCommerce là **migration Welcart → WooCommerce** (khác plugin), schema account/order/license riêng → **Phase M nặng hơn**, cần khảo sát DB Welcart ở bước spec.
+- Chức năng quản lý license trong My Page (xem key, deactivate/chuyển máy max 2 PC, order history, subscription, coupon student) **đã tồn tại** → build lại theo cái có (FR-16).
 - Bản dịch nội dung (Phase L) do khách/vendor cung cấp, trừ khi chọn option dịch in-house.
 
 **Rủi ro chính**
@@ -313,6 +340,7 @@ Tuần:  16  17  18  19  20  21  22
 - **Đối soát doanh thu**: Paddle là MoR nên hóa đơn/thuế nằm ở Paddle, Woo chỉ là bản ghi nội bộ.
 - **Idempotency webhook**: tránh tạo trùng license khi Paddle retry.
 - **Mô hình license RLM Cloud** (license pool/activation key, provision theo product) khác hệ per-key — cần chốt mapping product↔license template ở giai đoạn spec, có thể ảnh hưởng MD Phase 4.
+- **Migration Welcart → WooCommerce** (xem chi tiết §5b.1): khác plugin, **subscription đang active** (chuyển sang Paddle không gián đoạn), **license/activation đang dùng** (map sang RLM Cloud không khóa khách) — 3 điểm này phải khảo sát discovery sớm, là rủi ro lớn nhất của dự án.
 - Chất lượng/khối lượng bản dịch có thể phát sinh thêm MD (đã có option/ghi chú ở Phase L).
 
 
