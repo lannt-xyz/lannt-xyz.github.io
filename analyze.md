@@ -304,7 +304,7 @@ Tuần:  16  17  18  19  20  21  22
 - Tích hợp web↔RLM Cloud qua **REST/JSON Web Services API** (provision/activate/verify license).
 - Cubism Editor đã/đang tích hợp RLM Cloud activation (chỉ cần verify client, không build lại).
 - Dùng theme tùy biến trên Gutenberg (không phải page builder nặng).
-- Store hiện hành (store.live2d.com) **đã chạy WordPress** (theme Live2DStore) → migration & tiếp tục WP khả thi; cấu trúc sản phẩm single-item + variant + quantity giữ như cũ.
+- Store hiện hành (store.xxx.com) **đã chạy WordPress** (theme xxxStore) → migration & tiếp tục WP khả thi; cấu trúc sản phẩm single-item + variant + quantity giữ như cũ.
 - Bản dịch nội dung (Phase L) do khách/vendor cung cấp, trừ khi chọn option dịch in-house.
 
 **Rủi ro chính**
@@ -314,3 +314,189 @@ Tuần:  16  17  18  19  20  21  22
 - **Idempotency webhook**: tránh tạo trùng license khi Paddle retry.
 - **Mô hình license RLM Cloud** (license pool/activation key, provision theo product) khác hệ per-key — cần chốt mapping product↔license template ở giai đoạn spec, có thể ảnh hưởng MD Phase 4.
 - Chất lượng/khối lượng bản dịch có thể phát sinh thêm MD (đã có option/ghi chú ở Phase L).
+
+
+
+# xxx — Screen Inventory & FR Traceability
+
+> Mục đích: nối **Functional Requirements** (xxx-rebuild-plan.md §1) với **màn hình thực tế**
+> trên xxx.com/en. Đọc 2 chiều: FR→Màn để biết FR nằm ở đâu; Màn→FR để biết 1 màn cần gì.
+
+---
+
+## A. Screen Inventory (danh sách màn hình)
+
+### A0. Global (xuất hiện ở mọi màn)
+| ID | Màn hình | Ghi chú |
+|----|----------|---------|
+| G-01 | Header + Mega menu | Products/Services/Learn/Communities/Support |
+| G-02 | Footer nhiều cột | docs, services, support, legal, company |
+| G-03 | Language switcher | 7 ngôn ngữ (EN trước) |
+| G-04 | Search overlay/results | tìm kiếm toàn site |
+| G-05 | Cookie/GDPR consent | banner |
+
+### A1. Marketing / Content
+| ID | Màn hình | Nguồn trên site gốc |
+|----|----------|---------------------|
+| S-01 | Homepage | trang chủ (hero, 500+ titles, services, community, education, news) |
+| S-02 | Cubism Editor — Overview | "What's Cubism Editor?" |
+| S-03 | Cubism Editor — So sánh FREE/PRO | bảng version |
+| S-04 | Cubism Editor — Spec | yêu cầu hệ thống |
+| S-05 | Cubism Editor — Updates/Changelog | release notes |
+| S-06 | Cubism SDK — Overview | giới thiệu SDK |
+| S-07 | SDK Download (đa nền tảng) | Unity/Web/Native/Java/Unreal/Cocos |
+| S-08 | Support tools | After Effects plugin, Photoshop script |
+| S-09 | Try / Download (trial 42 ngày) | nút "Try xxx" → cấp **trial license** (cloud activate) |
+| S-10 | Services promo (link ngoài) | **ĐÃ ĐIỀU TRA**: tất cả link ngoài — nizima→docs.nizima.com, nizima LIVE→nizimalive.com, ACTION→site.nizima-action.com, JUKU→juku.xxxcs.jp, Creative Studio→xxxcs.jp. Chỉ làm block quảng bá + outbound link, KHÔNG build trang nội bộ |
+
+### A2. Learn / Community
+| ID | Màn hình | |
+|----|----------|---|
+| S-11 | Learn hub | **ĐÃ ĐIỀU TRA**: Editor/SDK manual & tutorial → docs.xxx.com (ngoài, chỉ link). Chỉ **Sample Data** là trang nội bộ |
+| S-11b | Sample Data (nội bộ) | trang tải sample/model trên xxx.com |
+| S-12 | Communities directory | danh sách cộng đồng (nội bộ) |
+| S-13 | Chapters / Discord | link cộng đồng (ngoài) |
+
+### A3. Programs / Support
+| ID | Màn hình | |
+|----|----------|---|
+| S-14 | Student Discount (info + form) | -76% |
+| S-15 | Education Aid / LEAP (info + form) | free cho trường |
+| S-16 | Creative Awards (info + submission) | |
+| S-17 | Contact / Help center (form) | |
+| S-18 | Company / About | |
+| S-19 | Careers | |
+
+### A4. News
+| ID | Màn hình | |
+|----|----------|---|
+| S-20 | News/Event listing + filter category | Sale/News/Update/Event/Awards |
+| S-21 | News/Event detail | |
+
+### A5. Legal
+| ID | Màn hình | |
+|----|----------|---|
+| S-22 | License Agreement | |
+| S-23 | Privacy / Terms | |
+
+### A6. Commerce (MỚI — thay cho external xxx Store)
+| ID | Màn hình | |
+|----|----------|---|
+| S-24 | Shop / Product list | catalog WooCommerce |
+| S-25 | Product detail (mua) | giá theo vùng, nút Buy |
+| S-26 | Cart | giỏ hàng |
+| S-27 | Checkout (Paddle overlay) | Paddle.js popup, MoR/tax |
+| S-28 | Order confirmation / Thank you | giao license sau mua |
+| S-29 | My Account — Orders & Invoices | lịch sử + hóa đơn Paddle |
+| S-30 | My Account — Licenses & Machines | xem key, activate/deactivate |
+| S-31 | Auth (login/register/reset) | tài khoản |
+
+### A7. System / Backend (không phải UI người dùng cuối)
+| ID | Thành phần | |
+|----|-----------|---|
+| B-01 | Paddle webhook handler | verify signature + idempotency |
+| B-02 | Reprise RLM Cloud integration service | tạo/suspend/revoke license |
+| B-03 | Email service | license key + invoice link |
+| B-04 | Admin/Editor (WP) phân quyền | team nội dung |
+
+---
+
+## B. Ma trận FR → Màn hình (mỗi FR nằm ở đâu)
+
+| FR | Mô tả ngắn | Màn hình liên quan |
+|----|-----------|--------------------|
+| FR-01 | i18n-ready, EN trước | G-03 + toàn bộ S-* (kiến trúc) |
+| FR-02 | Language switcher + locale URL + hreflang | G-03, mọi màn |
+| FR-03 | Mega menu + footer | G-01, G-02 |
+| FR-04 | Homepage blocks | S-01 |
+| FR-05 | Product Editor/SDK + so sánh + spec | S-02, S-03, S-04, S-06 |
+| FR-06 | Download SDK + trial + changelog | S-05, S-07, S-08, S-09 |
+| FR-07 | News + filter category + detail | S-20, S-21 |
+| FR-08 | Learn / Communities | S-11, S-12, S-13 |
+| FR-09 | Forms (Contact/Student/LEAP/Awards) | S-14, S-15, S-16, S-17 |
+| FR-10 | WooCommerce catalog + product↔Paddle Price | S-24, S-25 |
+| FR-11 | Paddle overlay checkout (MoR/tax) | S-27, B-01 |
+| FR-12 | Localized pricing + subscription | S-25, S-27 |
+| FR-13 | Order sync Woo↔Paddle + webhook | S-28, S-29, B-01 |
+| FR-14 | Tạo license theo policy | S-28, B-01, B-02, B-03 |
+| FR-15 | Refund/revoke + trial expiry | S-30, B-01, B-02 |
+| FR-16 | My Account license dashboard | S-29, S-30, S-31 |
+| FR-17 | Editor activate/validate qua **Reprise RLM Cloud** (cloud activation) | B-02 (+ client Cubism Editor) |
+| FR-18 | Phân quyền editor nội dung | B-04 |
+| FR-19 | Site search | G-04 |
+| FR-20 | Account/Auth (đăng ký/đăng nhập/reset) | S-31 |
+
+> **Đã chốt**: Services (S-10) và phần lớn Learn (S-11) chỉ là **outbound link** → không build trang nội bộ.
+
+---
+
+## C. Ma trận Màn hình → FR (mỗi màn cần chức năng gì)
+
+| Màn hình | FR cần có |
+|----------|-----------|
+| G-01/02 Header/Footer | FR-03, FR-02 |
+| G-03 Language switcher | FR-01, FR-02 |
+| G-04 Search | FR-19 |
+| S-01 Homepage | FR-04, FR-03, FR-07 (news feed) |
+| S-02–04 Editor pages | FR-05 |
+| S-05/07/08/09 Download/Trial | FR-06, FR-14 (cấp trial license, cloud activate) |
+| S-10 Services | outbound link (không FR nội bộ) |
+| S-11 Learn | outbound link; **S-11b Sample Data** = FR-08 (nội bộ) |
+| S-12–13 Community | FR-08 |
+| S-14–16 Programs | FR-09, + cấp license edu/student (FR-14) |
+| S-17 Contact | FR-09 |
+| S-20/21 News | FR-07 |
+| S-22/23 Legal | (nội dung tĩnh — đa ngôn ngữ FR-02) |
+| S-24/25 Shop/Product | FR-10, FR-12 |
+| S-26 Cart | FR-10 |
+| S-27 Checkout | FR-11, FR-12, FR-13 |
+| S-28 Thank you | FR-13, FR-14, FR-16 |
+| S-29 Orders/Invoices | FR-13, FR-16 |
+| S-30 Licenses/Machines | FR-15, FR-16, FR-17 |
+| S-31 Auth | FR-20 |
+
+---
+
+## D. Gap — ĐÃ CHỐT (cập nhật theo quyết định)
+
+| # | Vấn đề | Quyết định |
+|---|--------|-----------|
+| 1 | Search chưa có FR | ✅ Thêm **FR-19: Site search** |
+| 2 | Auth/Account chưa có FR | ✅ Thêm **FR-20: Account/Auth** (đăng ký/đăng nhập/reset) |
+| 3 | Trial download | ✅ **Cấp trial license**. License + activation dùng **Reprise RLM Cloud** (RLM Cloud là hệ phát hành license & cloud activation cho Cubism Editor). |
+| 4 | Services (nizima/JUKU…) | ✅ Đã điều tra: **toàn bộ link ngoài** → chỉ block quảng bá + outbound link, giữ như cũ |
+| 5 | Learn/manual | ✅ Đã điều tra: manual/tutorial → **docs.xxx.com (link ngoài)**; chỉ **Sample Data** nội bộ — giữ như cũ |
+| 6 | Cart đa món vs đơn lẻ | ✅ **ĐÃ ĐIỀU TRA store.xxx.com — chốt single-item**. Store hiện hành chỉ 1 sản phẩm (Cubism PRO), variant = tier/plan, seat = quantity, KHÔNG có cart đa món. Xem mục F |
+| 7 | Migration user/đơn cũ | ✅ **Giả định CÓ migration**, **báo giá riêng** (xem plan §Migration) |
+
+---
+
+## F. Xác nhận D6 — Single-item checkout (ĐÃ ĐIỀU TRA store.xxx.com)
+
+**Bằng chứng từ store hiện hành (store.xxx.com/en):**
+- Nền tảng: **WordPress** (theme `wp-content/themes/xxxStore/`).
+- Chỉ **1 sản phẩm: Cubism PRO**.
+- Biến thể: 3 tier (Indie/Business/Student) × plan (Monthly/Annual/3-Year).
+- Có **quantity selector** (mua nhiều seat = quantity).
+- **Không có cart đa sản phẩm** — thiết kế single-product + quantity.
+- Subscription, không refund.
+
+**→ Chốt: single-item checkout**, khớp đúng hành vi hiện hành.
+
+Mô hình dữ liệu đề xuất (khớp store cũ):
+- **1 WooCommerce product = Cubism PRO**; **variant (tier × plan)** = variations/Paddle Price ID; **seat = quantity**.
+- Nút "Buy" → chọn tier/plan/quantity → mở thẳng **Paddle overlay** (1 transaction = 1 price × qty).
+- Có thể **bỏ trang Cart (S-26)** hoặc giữ tối giản — đúng như store hiện tại.
+- License RLM Cloud provision theo order item (1 món → mapping order↔license↔activation đơn giản).
+
+⚠️ Ràng buộc: nếu **tương lai** thêm sản phẩm khác loại (add-on/SDK trả phí) → cần đánh giá lại có cần multi-item không. Hiện tại: KHÔNG, khóa single-item.
+
+---
+
+## G. Cách dùng tài liệu này
+
+1. Toàn bộ gap mục D **đã chốt 100%** (D6 đã xác nhận qua điều tra store.xxx.com) → FR khớp đủ với màn hình.
+2. Dùng **ma trận C** làm checklist khi thiết kế từng wireframe.
+3. Dùng **ma trận B** để verify không FR nào bị bỏ sót màn.
+4. Gắn mỗi màn vào sitemap để estimate UI/UX theo màn.
+
