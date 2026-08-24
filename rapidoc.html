@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>API Docs</title>
+  <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+  <style>
+    body { margin:0; }
+    #version-bar {
+      display:flex; align-items:center; gap:10px;
+      background:#1a1a2e; padding:8px 16px; font-family:sans-serif;
+    }
+    #version-bar label { color:#ccc; font-size:13px; }
+    #version-select {
+      background:#0f3460; color:#fff; border:1px solid #444;
+      padding:5px 10px; border-radius:4px; font-size:13px;
+    }
+    #version-bar .err { color:#ff6b6b; font-size:13px; }
+  </style>
+</head>
+<body>
+
+  <div id="version-bar">
+    <label for="version-select">Phiên bản:</label>
+    <select id="version-select"><option>Đang tải...</option></select>
+  </div>
+
+  <rapi-doc
+    id="thedoc"
+    theme="dark"
+    render-style="read"
+    show-header="false"
+    allow-authentication="true"
+  ></rapi-doc>
+
+  <script>
+    var select = document.getElementById('version-select');
+    var doc = document.getElementById('thedoc');
+    var bar = document.getElementById('version-bar');
+
+    function paramVersion() {
+      return new URLSearchParams(window.location.search).get('v');
+    }
+
+    function setVersion(v) {
+      doc.setAttribute('spec-url', v.specUrl);
+      var url = new URL(window.location.href);
+      url.searchParams.set('v', v.id);
+      window.history.replaceState(null, '', url);
+    }
+
+    fetch('versions.json')
+      .then(function(r){
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(manifest){
+        var versions = manifest.versions || [];
+        if(!versions.length) throw new Error('versions.json không có phiên bản nào');
+
+        select.innerHTML = versions.map(function(v){
+          return '<option value="' + v.id + '">' + v.label + '</option>';
+        }).join('');
+
+        var requested = paramVersion();
+        var initial = versions.find(function(v){ return v.id === requested; })
+          || versions.find(function(v){ return v.id === manifest.latest; })
+          || versions[versions.length - 1];
+
+        select.value = initial.id;
+        setVersion(initial);
+
+        select.addEventListener('change', function(){
+          var v = versions.find(function(x){ return x.id === select.value; });
+          if(v) setVersion(v);
+        });
+      })
+      .catch(function(err){
+        bar.innerHTML = '<span class="err">Không tải được versions.json: ' + err.message + '</span>';
+      });
+  </script>
+
+</body>
+</html>
