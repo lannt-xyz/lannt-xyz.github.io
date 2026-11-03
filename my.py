@@ -13,8 +13,11 @@ Hai kiểu xuất:
 import argparse
 import datetime as dt
 import re
+import gc
 import sys
+import time
 import unicodedata
+import zipfile
 from pathlib import Path
 
 import pandas as pd
@@ -48,16 +51,74 @@ def clean(v):
     return re.sub(r"\s{2,}", " ", s)
 
 
-def sheet_rows_openpyxl(ws):
-    """Đọc sheet .xlsx, điền xuống giá trị cho ô gộp dọc (merged), lấy kết quả công thức đã lưu."""
-    grid = [[c for c in row] for row in ws.iter_rows(values_only=True)]
-    for rng in list(ws.merged_cells.ranges):
-        top = ws.cell(rng.min_row, rng.min_col).value
-        # chỉ điền xuống theo chiều dọc (nhóm gộp dòng); ô gộp ngang (tiêu đề) giữ nguyên ở ô đầu
-        c = rng.min_col
-        for r in range(rng.min_row, rng.max_row + 1):
-            if r - 1 < len(grid) and c - 1 < len(grid[r - 1]):
-                grid[r - 1][c - 1] = top
+MAX_EMPTY_RUN = 1000  # gặp chừng này hàng trống liên tiếp thì coi như hết dữ liệu (bỏ vùng định dạng ảo)
+
+
+def col_to_num(letters):
+    n = 0
+    for ch in letters:
+        n = n * 26 + ord(ch) - 64
+    return n
+
+
+def merged_ranges(path, sheet_name):
+    """Đọc danh sách ô gộp thẳng từ XML (không phải nạp cả sheet vào RAM). Trả [(r1,c1,r2,c2)]."""
+    import re
+    try:
+        with zipfile.ZipFile(path) as z:
+            wbx = z.read("xl/workbook.xml").decode("utf-8", "replace")
+            rels = z.read("xl/_rels/workbook.xml.rels").decode("utf-8", "replace")
+            m = re.search(r'<sheet\b[^>]*\bname="%s"[^>]*>' % re.escape(sheet_name.replace("&", "&amp;")), wbx)
+            if not m:
+                return []
+            rid = re.search(r'r:id="([^"]+)"', m.group(0)).group(1)
+            tgt = re.search(r'<Relationship\b[^>]*\bId="%s"[^>]*>' % re.escape(rid), rels).group(0)
+            target = re.search(r'Target="([^"]+)"', tgt).group(1).lstrip("/")
+            member = target if target.startswith("xl/") else "xl/" + target
+            out, carry = [], b""
+            pat = re.compile(rb'<mergeCell\b[^>]*ref="([A-Z]+)(\d+):([A-Z]+)(\d+)"')
+            with z.open(member) as f:
+                while True:
+                    chunk = f.read(1 << 20)
+                    if not chunk:
+                        break
+                    buf = carry + chunk
+                    for a, b, c, d in pat.findall(buf):
+                        out.append((int(b), col_to_num(a.decode()), int(d), col_to_num(c.decode())))
+                    carry = buf[-300:]  # tránh cắt giữa thẻ; trùng lặp được khử bên dưới
+            return list(dict.fromkeys(out))
+    except Exception:
+        return []
+
+
+def sheet_rows_openpyxl(ws, path=None):
+    """Đọc sheet .xlsx kiểu streaming: bỏ hàng/cột trống ở cuối, điền xuống ô gộp dọc."""
+    grid, empty_run, max_w = [], 0, 0
+    for row in ws.iter_rows(values_only=True):
+        if any(v is not None and v != "" for v in row):
+            grid.extend([[]] * empty_run)  # giữ hàng trống xen kẽ để số dòng không lệch
+            empty_run = 0
+            row = list(row)
+            while row and (row[-1] is None or row[-1] == ""):
+                row.pop()
+            max_w = max(max_w, len(row))
+            grid.append(row)
+        else:
+            empty_run += 1
+            if empty_run >= MAX_EMPTY_RUN:
+                break
+    if path is not None and grid:
+        for r1, c1, r2, c2 in merged_ranges(path, ws.title):
+            if r1 - 1 >= len(grid):
+                continue
+            top = grid[r1 - 1][c1 - 1] if c1 - 1 < len(grid[r1 - 1]) else None
+            if top is None:
+                continue
+            for r in range(r1, min(r2, len(grid)) + 1):  # chỉ điền xuống theo chiều dọc
+                row = grid[r - 1]
+                if len(row) < c1:
+                    row.extend([None] * (c1 - len(row)))
+                row[c1 - 1] = top
     return grid
 
 
@@ -66,11 +127,18 @@ def sheets_of(path: Path):
     ext = path.suffix.lower()
     out = []
     if ext in EXCEL_EXT:
-        wb = load_workbook(path, data_only=True, read_only=False)
-        for ws in wb.worksheets:
-            if ws.sheet_state != "visible":
-                continue
-            out.append((ws.title, sheet_rows_openpyxl(ws)))
+        wb = load_workbook(path, data_only=True, read_only=True)
+        try:
+            for ws in wb.worksheets:
+                if ws.sheet_state != "visible":
+                    continue
+                try:
+                    ws.reset_dimensions()  # bỏ qua vùng "dimension" bị phình trong file
+                except Exception:
+                    pass
+                out.append((ws.title, sheet_rows_openpyxl(ws, path)))
+        finally:
+            wb.close()
     elif ext == ".xls":
         for name, df in pd.read_excel(path, sheet_name=None, header=None).items():
             out.append((name, df.astype(object).where(df.notna(), None).values.tolist()))
@@ -189,8 +257,10 @@ def main():
     print(f"Tìm thấy {len(files)} file.")
 
     n_out = 0
-    for f in files:
+    for idx, f in enumerate(files, 1):
         label = f.relative_to(src).as_posix()
+        t0 = time.time()
+        print(f"({idx}/{len(files)}) đang đọc {label} ({f.stat().st_size / 1e6:.1f} MB)...", flush=True)
         try:
             sheets = sheets_of(f)
         except Exception as e:  # file hỏng/có mật khẩu
@@ -209,7 +279,9 @@ def main():
                 out = out_dir / f"{safe(f.stem)}__{safe(sheet)}{suffix}.md"
                 out.write_text(md, encoding="utf-8")
                 n_out += 1
-        print(f"[OK] {label}: {len(sheets)} sheet")
+        print(f"     [OK] {len(sheets)} sheet, {time.time() - t0:.1f}s", flush=True)
+        del sheets
+        gc.collect()
     print(f"\nXong: {n_out} file .md trong {dst}")
 
 
