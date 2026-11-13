@@ -1,5 +1,16 @@
-pip show llama-cpp-python
-python -c "from llama_cpp import Llama; l=Llama(model_path=r'models\qwen-2.5-7b-instruct-gguf-Q4-K-M.gguf', n_ctx=2048, verbose=True); print(l.create_chat_completion(messages=[{'role':'user','content':'Translate to English: こんにちは'}]))"
-
-python -c "from llama_cpp import Llama; l=Llama(model_path=r'models\qwen-2.5-7b-instruct-gguf-Q4-K-M.gguf', n_ctx=4096, verbose=False); print(l.create_chat_completion(messages=[{'role':'user','content':'Translate to English: こんにちは'}]))"
-
+python -c "
+import threading
+from pathlib import Path
+from xlsx_trans import config, llama_local
+cfg = config.load_config()
+cfg.backend = 'llama_cpp'
+cfg.model_path = Path(r'models/qwen-2.5-7b-instruct-gguf-Q4-K-M.gguf')
+cfg.refresh()
+print('MAIN  :', llama_local.translate_text('こんにちは', cfg))
+r = []
+def w():
+    try: r.append(llama_local.translate_text('よろしくお願いします', cfg))
+    except Exception as e: r.append('ERR ' + repr(e))
+t = threading.Thread(target=w); t.start(); t.join()
+print('THREAD:', r[0])
+"
